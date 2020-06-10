@@ -1,0 +1,162 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "This document explains REST operations to migrate authentication AWS Cognito to KeyCloak",
+        "version": "0.1.0",
+        "title": "User Migration Service",
+        "termsOfService": "https://www.tsi-payment.com",
+        "x-logo": {
+            "url": "https://pbs.twimg.com/profile_images/958334879854448640/zzLP7bOt_400x400.jpg",
+            "altText": "TSI - User Migration Service API"
+        },
+        "contact": {
+            "email": "support.integration@tsi-payment.com"
+        }
+    },
+    "basePath": "/",
+    "tags": [
+        {
+            "name": "User Migration",
+            "description": "user migration management"
+        }
+    ],
+    "schemes": [
+        "http"
+    ],
+    "paths": {
+        "/{username}": {
+            "get": {
+                "parameters": [
+                    {
+                        "name": "username",
+                        "in": "path",
+                        "type": "string",
+                        "required": true,
+                        "description": "user identifier"
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/username"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "user not found"
+                    }
+                },
+                "summary": "The GET request will have to return user data as a JSON response in the form:",
+                "tags": [
+                    "user migration"
+                ]
+            },
+            "post": {
+                "tags": [
+                    "user migration"
+                ],
+                "summary": "The POST request is for password validation. It will have to accept the following body",
+                "consumes": [
+                    "application/x-www-form-urlencoded"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "username",
+                        "in": "path",
+                        "type": "string",
+                        "required": true,
+                        "description": "user identifier"
+                    },
+                    {
+                        "name": "password",
+                        "in": "formData",
+                        "type": "string",
+                        "required": true,
+                        "description": "As this is the correct password, the user will be logged in. In the background, his information will be migrated to Keycloak."
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "404": {
+                        "description": "invalid credential"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "username": {
+            "type": "object",
+            "required": [
+                "username",
+                "email",
+                "firstName",
+                "lastName",
+                "enabled",
+                "emailVerified",
+                "attributes",
+                "roles"
+            ],
+            "properties": {
+                "username": {
+                    "type": "string",
+                    "maxLength": 32,
+                    "example": "bob"
+                },
+                "email": {
+                    "type": "string",
+                    "maxLength": 32,
+                    "example": "bob@company.com"
+                },
+                "firstName": {
+                    "type": "string",
+                    "maxLength": 32,
+                    "example": "Bob"
+                },
+                "lastName": {
+                    "type": "string",
+                    "example": "Smith",
+                    "maximum": 32
+                },
+                "enabled": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "emailVerified": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "attributes": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/username"
+                    },
+                    "example": {
+                        "position": ["rockstar-developer"],
+                        "likes": ["cats", "dogs", "cookies"]
+                    }
+                },
+                "roles": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/username"
+                    },
+                    "example": ["admin"]
+
+                }
+            }
+        }
+    }
+}
+

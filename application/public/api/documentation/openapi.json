@@ -1,0 +1,218 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+        "title": "User Migration Service",
+        "description": "This document explains REST operations to migrate authentication AWS Cognito to KeyCloak",
+        "termsOfService": "https://www.tsi-payment.com",
+        "contact": {
+            "email": "support.integration@tsi-payment.com"
+        },
+        "version": "0.1.0",
+        "x-logo": {
+            "url": "https://pbs.twimg.com/profile_images/958334879854448640/zzLP7bOt_400x400.jpg",
+            "altText": "TSI - User Migration Service API"
+        }
+    },
+    "servers": [
+        {
+            "url": "/"
+        }
+    ],
+    "tags": [
+        {
+            "name": "User Migration",
+            "description": "user migration management"
+        }
+    ],
+    "paths": {
+        "/{phoneNumber}": {
+            "get": {
+                "tags": [
+                    "user migration"
+                ],
+                "summary": "The GET request will have to return user data as a JSON response in the form:",
+                "parameters": [
+                    {
+                        "name": "phoneNumber",
+                        "in": "path",
+                        "description": "user identifier",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "default": "33612345678"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/phoneNumber"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "user not found",
+                        "content": {}
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "user migration"
+                ],
+                "summary": "The POST request is for password validation. It will have to accept the following body",
+                "parameters": [
+                    {
+                        "name": "phoneNumber",
+                        "in": "path",
+                        "description": "user identifier",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "default": "33612345678"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "password"
+                                ],
+                                "properties": {
+                                    "password": {
+                                        "type": "string",
+                                        "description": "As this is the correct password, the user will be logged in. In the background, his information will be migrated to Keycloak."
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {}
+                    },
+                    "404": {
+                        "description": "invalid credential",
+                        "content": {}
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "phoneNumber": {
+                "required": [
+                    "attributes",
+                    "email",
+                    "emailVerified",
+                    "enabled",
+                    "firstName",
+                    "lastName",
+                    "roles",
+                    "userName"
+                ],
+                "type": "object",
+                "properties": {
+                    "expireAt": {
+                        "type": "string",
+                        "example": "null"
+                    },
+                    "profession": {
+                        "type": "string",
+                        "example": "null"
+                    },
+                    "currency": {
+                        "type": "string",
+                        "example": "EUR"
+                    },
+                    "phoneNumber": {
+                        "type": "string",
+                        "example": "33612345678"
+                    },
+                    "pieceType": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "city": {
+                        "type": "string",
+                        "example": "null"
+                    },
+                    "birthPlace": {
+                        "type": "string",
+                        "example": "none"
+                    },
+                    "pieceCode": {
+                        "type": "string",
+                        "example": "1212345678"
+                    },
+                    "address": {
+                        "type": "string",
+                        "example": "null"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "null"
+                    },
+                    "statusMessage": {
+                        "type": "string",
+                        "example": "SUCCESS"
+                    },
+                    "status": {
+                        "type": "string",
+                        "example": "success"
+                    },
+                    "firstName": {
+                        "type": "string",
+                        "example": "Bob"
+                    },
+                    "lastName": {
+                        "type": "string",
+                        "example": "Ewing"
+                    },
+                    "cardToken": {
+                        "type": "string",
+                        "example": "null"
+                    },
+                    "customerId": {
+                        "type": "string",
+                        "example": "1212345678"
+                    },
+                    "gender": {
+                        "type": "string",
+                        "example": "null"
+                    },
+                    "region": {
+                        "type": "string",
+                        "example": "null"
+                    },
+                    "birthDate": {
+                        "type": "string",
+                        "example": "16/08/1958"
+                    },
+                    "country": {
+                        "type": "string",
+                        "example": "FR"
+                    },
+                    "statusCode": {
+                        "type": "string",
+                        "example": "000"
+                    }
+
+                }
+            }
+        }
+    }
+}
